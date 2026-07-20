@@ -1,0 +1,53 @@
+---
+import "@fontsource-variable/inter";
+import "@/styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Route path without trailing slash, e.g. "/" or "/about". */
+  path: string;
+  /** Shorter description for OG/twitter cards (defaults to description). */
+  ogDescription?: string;
+  noindex?: boolean;
+}
+
+const SITE = "https://__DOMAIN__";
+const { title, description, path, ogDescription = Astro.props.description, noindex = false } =
+  Astro.props;
+// Root canonical is the bare origin without trailing slash (live parity).
+const canonical = path === "/" ? SITE : `${SITE}${path}`;
+const ogImage = `${SITE}/branding/logo-1024.png`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/icon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="siteOS" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={ogDescription} />
+    <meta name="twitter:image" content={ogImage} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

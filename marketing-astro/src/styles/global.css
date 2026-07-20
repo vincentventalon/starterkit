@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #0a1f1a;
+  --color-muted: #4a5d57;
+  --color-muted-light: #6b7f78;
+  --color-border: #e1ebe6;
+  --color-surface: #f3f9f6;
+  --color-accent: #10b981;
+  --color-accent-deep: #047857;
+  --color-accent-soft: #d1fae5;
+  --color-accent-2: #0891b2;
+  --color-ink: #0a1f1a;
+
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
+    sans-serif;
+}
+
+:root {
+  --gradient-accent: linear-gradient(135deg, #10b981 0%, #0891b2 100%);
+  --shadow-soft: 0 1px 2px rgba(10, 31, 26, 0.04),
+    0 4px 16px rgba(10, 31, 26, 0.04);
+  --shadow-pop: 0 8px 24px rgba(16, 185, 129, 0.18),
+    0 2px 6px rgba(8, 145, 178, 0.12);
+}
+
+html,
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+@layer utilities {
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+  .text-gradient {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .ring-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  .ring-pop {
+    box-shadow: var(--shadow-pop);
+  }
+  .grid-bg {
+    background-image: linear-gradient(
+        to right,
+        rgba(16, 185, 129, 0.06) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(16, 185, 129, 0.06) 1px,
+        transparent 1px
+      );
+    background-size: 48px 48px;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.85);
+  }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}

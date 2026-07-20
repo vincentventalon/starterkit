@@ -1,0 +1,31 @@
+{
+  "name": "__WORKER_NAME__",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "seo:check": "siteos-check --dist ./dist --fail-on error",
+    "deploy": "astro build && wrangler deploy",
+    "generate:sitemap-dates": "node scripts/generate-sitemap-dates.js"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.4.0",
+    "@fontsource-variable/inter": "^5.2.5",
+    "@iconify-json/lucide": "^1.2.0",
+    "astro": "^5.12.0",
+    "astro-icon": "^1.1.5",
+    "@tailwindcss/vite": "^4.1.10",
+    "tailwindcss": "^4.1.10"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@site-os/check": "^0.1.0",
+    "fast-glob": "^3.3.2",
+    "typescript": "^5.9.2",
+    "wrangler": "^4.37.1"
+  }
+}

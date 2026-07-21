@@ -11,6 +11,17 @@ Stack : Astro 5 statique · Tailwind 4 (`@tailwindcss/vite`) · **0 JS shippé**
 vrai besoin apparaît) · astro-icon + `@iconify-json/lucide` · fonts via
 `@fontsource-variable/*` · Cloudflare Workers static assets.
 
+## Modules optionnels (à activer par produit)
+
+- **Îlots React** (`@astrojs/react`) — quand le produit a de vrais outils
+  interactifs. Pattern : coquille `.astro` 0 JS + composant client monté en
+  `<X client:visible />`. À défricher avec templatefox (16 outils déjà
+  island-shaped).
+- **Docs = Starlight** (`@astrojs/starlight`, décidé 2026-07-21) — surface doc
+  dans le même `apps/marketing`, `.mdx` en `src/content/docs/`. Standard
+  portfolio (remplace Nextra). À défricher avec templatefox (1er cas), puis
+  figer ici comme module réutilisable.
+
 ## Instancier
 
 1. Copier ce dossier vers `<produit>/apps/marketing`, renommer

@@ -1,115 +1,40 @@
-# CLAUDE.md - Project Context for Claude
+# _ops/starterkit — les seeds du portfolio
 
-## Project Overview
+Ce dossier contient **deux seeds de nature très différente**. Ne pas les
+confondre.
 
-**Starterkit** - A SaaS starter kit with Next.js frontend and FastAPI backend.
+## `marketing-astro/` — le seed vivant ✅
 
-## Tech Stack
+Le seed de la couche `apps/marketing` de la forme standard produit. Il a servi
+aux 5 migrations Astro du portfolio et au scaffold de deviensdev. **C'est lui
+qu'on instancie pour tout nouveau site.**
 
-| Component | Technology | Hosting |
-|-----------|------------|---------|
-| Frontend | Next.js 15 (React 19, TypeScript) | Vercel |
-| Backend | FastAPI (Python 3.11) | Google Cloud Run |
-| Database | PostgreSQL | Supabase |
-| Auth | Supabase Auth (JWT + API keys) | Supabase |
-| Payments | Stripe | - |
-| Storage | Supabase Storage | Supabase |
-| Email | Resend | - |
+👉 **Tout est dans [`marketing-astro/README.md`](marketing-astro/README.md)** :
+stack, invariants versionnés, modules optionnels (îlots React, docs Starlight),
+procédure d'instanciation. Ne rien dupliquer ici.
 
-## Project Structure
+⚠️ Le seed est pinné **Astro 5** alors que la cible portfolio est **Astro 7**
+(photocv et vincentventalon tournent en 7.1.x en prod). Dette connue : bump au
+prochain upgrade coordonné, en sautant la 6.
 
-```
-/
-├── frontend/               # Next.js frontend
-│   ├── app/                # App Router pages
-│   ├── components/         # React components
-│   ├── content/            # Nextra documentation (MDX)
-│   ├── contexts/           # React contexts
-│   ├── hooks/              # Custom React hooks
-│   ├── lib/                # Utility libraries
-│   ├── libs/               # Shared libraries
-│   ├── public/             # Static assets
-│   ├── types/              # TypeScript types
-│   ├── config.ts           # App configuration
-│   ├── package.json        # Frontend dependencies
-│   └── next.config.mjs     # Next.js config
-├── backend/                # FastAPI backend
-│   ├── app/
-│   │   ├── routers/        # API endpoints
-│   │   │   └── v1/         # Public API v1
-│   │   ├── services/       # Business logic
-│   │   └── core/           # Config, settings
-│   └── deploy.sh           # Cloud Run deploy script
-├── integrations/           # Third-party integration templates
-│   ├── zapier/             # Zapier CLI integration
-│   ├── n8n/                # n8n community node
-│   └── make/               # Make.com custom app
-├── generated/              # Auto-generated files (do not edit manually)
-│   ├── openapi.json        # OpenAPI schema
-│   └── postman/            # Postman collection
-├── scripts/                # Code generation scripts
-│   └── generate.py         # OpenAPI & Postman generator
-├── .github/workflows/      # CI/CD pipelines
-├── supabase/migrations/    # Database migrations
-└── knowledge-center/       # Deep-dive docs (Supabase, etc.)
-```
+## Le reste — le vieux seed SaaS ⚠️ périmé
 
-## Common Commands
+`frontend/` + `backend/` + `supabase/` + `integrations/` + `generated/` : le
+starter kit Next.js/FastAPI d'origine (février 2026). Il est **hors standard sur
+deux points** et ne doit pas servir de base à un produit sans être remis à jour :
 
-```bash
-# Frontend
-cd frontend
-npm run dev          # Start dev server
-npm run build        # Production build
-npm run lint         # ESLint
+- **Structure** : `frontend/` et `backend/` à la racine, alors que la forme
+  standard est `apps/app` + `apps/marketing` (+ `apps/worker` si Worker
+  Cloudflare).
+- **Stack data** : tout y est Supabase (base, auth, storage), alors que les
+  produits récents sont sur **Neon + Better Auth** (photocv, parsedocu, siteOS).
+  Seul templatefox est encore sur Supabase.
 
-# Backend
-cd backend
-uv sync              # Install dependencies
-uv run pytest        # Run tests
-./deploy.sh          # Deploy to Cloud Run
+Ce qui reste bon à reprendre tel quel : la génération OpenAPI/Postman
+(`scripts/generate.py`, appelé depuis `backend/`), les templates
+`integrations/` (Zapier, n8n, Make), les hooks husky/commitlint.
 
-# Regenerate OpenAPI & Postman (run from backend/)
-cd backend
-uv run python ../scripts/generate.py
+Contenu détaillé de ce vieux seed (structure, schéma teams, commandes) :
+`CLAUDE.md.avant-degraissage.md`.
 
-# Supabase Database
-supabase db reset                     # Reset local DB + apply migrations + seed
-supabase migration new <name>         # Create new migration
-```
-
-## Teams & Multi-Tenancy
-
-The app uses a team-based multi-tenancy model. All resources belong to teams, not individual users.
-
-### Database Schema
-
-| Table | Purpose |
-|-------|---------|
-| `teams` | Team entity with name, slug, owner_id, credits |
-| `team_api_keys` | API keys table: team_id, api_key, name |
-| `team_members` | Junction table: team_id, user_id, role |
-| `team_invitations` | Pending invites: team_id, email, token, role |
-| `profiles.last_team_id` | User's currently selected team |
-
-### Role Permissions
-
-| Role | Capabilities |
-|------|--------------|
-| `owner` | Full access, billing, delete team |
-| `admin` | Manage members, manage resources |
-| `member` | View resources, use API |
-
-## Adding a New API Endpoint
-
-When adding a new V1 API endpoint:
-
-1. Create Pydantic models with examples
-2. Document the endpoint with summary/description
-3. Regenerate OpenAPI & Postman: `cd backend && uv run python ../scripts/generate.py`
-
-## Knowledge Center
-
-Deep-dive documentation for specific services lives in `/knowledge-center/`:
-
-- [SUPABASE.md](./knowledge-center/SUPABASE.md) - Database, auth, project config, troubleshooting
+Conventions portfolio : `~/Code/cockpit/_ops/conventions.md`.

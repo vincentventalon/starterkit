@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "seo:check": "siteos-check --dist ./dist --fail-on error",
-    "deploy": "astro build && wrangler deploy",
+    "deploy": "node scripts/deploy-guard.mjs && astro build && wrangler deploy",
     "generate:sitemap-dates": "node scripts/generate-sitemap-dates.js"
   },
   "dependencies": {

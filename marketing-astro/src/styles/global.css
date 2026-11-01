@@ -48,6 +48,8 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    /* background-clip s'arrête à la boîte de ligne : sans ça, les jambages sont coupés. */
+    padding-bottom: 0.12em;
   }
   .ring-soft {
     box-shadow: var(--shadow-soft);

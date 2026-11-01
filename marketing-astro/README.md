@@ -6,7 +6,7 @@ migration siteOS (2026-07-20, premier cobaye). **Ne versionne que les
 invariants cross-produits** ; les sections, la copy et les composants
 produit sont écrits par l'agent à chaque instanciation (coût IA ~0).
 
-Stack : Astro 5 statique · Tailwind 4 (`@tailwindcss/vite`) · **0 JS shippé**
+Stack : Astro 7 statique · Tailwind 4 (`@tailwindcss/vite`) · **0 JS shippé**
 (pas de React ; toute interactivité = liens/CSS, les îlots seulement si un
 vrai besoin apparaît) · astro-icon + `@iconify-json/lucide` · fonts via
 `@fontsource-variable/*` · Cloudflare Workers static assets.
@@ -29,6 +29,7 @@ vrai besoin apparaît) · astro-icon + `@iconify-json/lucide` · fonts via
    `.github-workflow/deploy-marketing.yml` → `.github/workflows/` du repo.
 2. Remplacer les placeholders partout :
    - `__DOMAIN__` → domaine apex (ex. `templatefox.com`)
+   - `__PRODUCT_NAME__` → nom du produit dans `og:site_name` (ex. `TemplateFox`)
    - `__WORKER_NAME__` → nom du worker Cloudflare (ex. `templatefox-marketing`)
 3. `src/styles/global.css` : remplacer les tokens `@theme` (couleurs, font)
    par la charte du produit. Les utilities (`gradient-accent`, `ring-soft`,
@@ -48,11 +49,25 @@ vrai besoin apparaît) · astro-icon + `@iconify-json/lucide` · fonts via
 - `worker.js` : canonical host (www + http → https apex) ; garder le
   redirect `/sitemap.xml` → `/sitemap-index.xml` seulement si le produit a
   un historique next-sitemap.
-- Sitemap : `@astrojs/sitemap` + `serialize()` (lastmod git, loc racine
-  sans slash) ; `robots.txt` statique pointe `sitemap-index.xml`.
+- Sitemap : `@astrojs/sitemap` + `serialize()` (lastmod git) ;
+  `robots.txt` statique pointe `sitemap-index.xml`. Depuis la 3.7.4,
+  `@astrojs/sitemap` remet un slash à la racine : le hook `sitemap-root-loc`
+  la garde identique au canonical de l'accueil (origine nue).
+- **`compressHTML: true`** : le défaut `jsx` d'Astro 7 retire les espaces entre
+  éléments en ligne et colle des mots à l'écran (« broken pagesbefore »).
+- **`vite.build.cssMinify: "esbuild"` + `cssTarget` de Vite 6** : sinon
+  `-webkit-backdrop-filter` disparaît et les media queries sortent en
+  `width>=`, ignorées avant Safari 16.4. `esbuild` est une dépendance directe,
+  Astro 7.4 ne l'apporte plus.
+- Lecture de fichiers au build : depuis `process.cwd()`, jamais
+  `import.meta.url` (une fois bundlé, l'URL dépend du chunk).
+  `scripts/generate-sitemap-dates.js` n'est pas concerné : Node le lance tel
+  quel.
+- `npm run deploy` passe par `scripts/deploy-guard.mjs` (CI seul, source
+  `_ops/deploy-guard/`, relancer son `install.sh` pour mettre à jour la copie).
 - SEO gate : `npm run seo:check` (`@site-os/check`, dogfooding siteOS) en
   CI **et** dans le deploy workflow — build cassé si erreurs SEO.
-- CI : Node ≥ 22 (wrangler 4.38+ l'exige).
+- CI et `engines` : Node 22.23.4, le minimum d'Astro 7.4.4.
 
 ## Secrets GitHub à poser (une fois par repo)
 

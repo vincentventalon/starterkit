@@ -13,10 +13,6 @@ qu'on instancie pour tout nouveau site.**
 stack, invariants versionnés, modules optionnels (îlots React, docs Starlight),
 procédure d'instanciation. Ne rien dupliquer ici.
 
-⚠️ Le seed est pinné **Astro 5** alors que la cible portfolio est **Astro 7**
-(photocv et vincentventalon tournent en 7.1.x en prod). Dette connue : bump au
-prochain upgrade coordonné, en sautant la 6.
-
 ## Le reste — le vieux seed SaaS ⚠️ périmé
 
 `frontend/` + `backend/` + `supabase/` + `integrations/` + `generated/` : le
